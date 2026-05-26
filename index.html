@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#8a6655" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="SCES Dashboard" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="assets/img/icon-192.png" />
+    <title>Sta. Cruz Elementary School </title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><img src="assets/img/sces-logo.png" alt="SCES logo" /></div>
+        <div>
+          <h1>SCES Analytics</h1>
+          <span>Decision Support Plan</span>
+        </div>
+      </div>
+
+      <div class="side-label">ANALYTICS</div>
+      <nav class="side-nav">
+        <a class="active" href="#overview"
+          ><i class="bi bi-grid-1x2-fill"></i> School Overview</a
+        >
+
+        <a href="#descriptive"
+          ><i class="bi bi-clipboard2-data-fill"></i> Descriptive Analysis</a
+        >
+        <a href="#diagnostic"
+          ><i class="bi bi-search-heart-fill"></i> Diagnostic Analysis</a
+        >
+        <a href="#predictive"
+          ><i class="bi bi-graph-up-arrow"></i> Predictive Analysis</a
+        >
+        <a href="#prescriptive"
+          ><i class="bi bi-lightbulb-fill"></i> Recommendations</a
+        >
+      </nav>
+
+      <div class="side-label">DATA</div>
+      <nav class="side-nav">
+        <a href="#spreadsheet"><i class="bi bi-table"></i> Raw Data / Input</a>
+        <a href="#adminPanel" class="admin-only d-none"><i class="bi bi-database-add"></i> Add New School Year</a>
+        <a href="#matrix"
+          ><i class="bi bi-calendar-check-fill"></i> History &amp; Snapshot</a
+        >
+      </nav>
+
+      <div class="active-filter">
+        <small>ACTIVE FILTER</small>
+        <strong id="sideFilterText">All Years</strong>
+        <span>SY 2021-2022 to 2025-2026</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="topbar-title">
+          <img class="topbar-logo" src="assets/img/sces-logo.png" alt="SCES logo" />
+          <div>
+            <p class="eyebrow mb-1">SCHOOL PERFORMANCE ANALYSIS</p>
+            <h2>Sta. Cruz Elementary School</h2>
+          </div>
+        </div>
+        <div class="top-actions">
+          <select id="yearFilter" class="form-select form-select-sm">
+            <option value="all">All Years</option>
+            <option value="2021-2022">2021-2022</option>
+            <option value="2022-2023">2022-2023</option>
+            <option value="2023-2024">2023-2024</option>
+            <option value="2024-2025">2024-2025</option>
+            <option value="2025-2026">2025-2026</option>
+          </select>
+          <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#authModal" id="adminLoginBtn">
+            <i class="bi bi-shield-lock"></i> Admin Login
+          </button>
+          <button class="btn btn-outline-danger btn-sm d-none" id="adminLogoutBtn">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="window.print()">
+            <i class="bi bi-printer"></i> Print
+          </button>
+        </div>
+      </header>
+
+      <section class="hero-card" id="overview">
+        <div class="hero-content">
+          <span class="badge rounded-pill text-bg-light"
+            ><i class="bi bi-geo-alt-fill me-1"></i> Sta. Cruz, Lubao
+            Pampanga</span
+          >
+          <h3>
+            Performance monitoring dashboard for enrollment, retention, class
+            size, and resource planning.
+          </h3>
+          <p>
+            This dashboard transforms the school dataset into KPIs, charts,
+            diagnostic evidence, forecasts, and recommended management actions.
+          </p>
+          <div class="hero-buttons">
+            <a href="#spreadsheet" class="btn btn-light btn-sm"
+              ><i class="bi bi-database-fill"></i> View embedded data</a
+            >
+            <a href="#prescriptive" class="btn btn-outline-light btn-sm"
+              ><i class="bi bi-lightbulb"></i> View actions</a
+            >
+          </div>
+        </div>
+        <div class="hero-stat">
+          <small>Current Enrollment</small>
+          <strong id="heroEnrollment">1,748</strong>
+          <span
+            ><i class="bi bi-arrow-down-right"></i> -11.1% vs 2021-2022</span
+          >
+        </div>
+      </section>
+
+      <section class="system-strip" id="systemStatus">
+        <div>
+          <i class="bi bi-database-check"></i>
+          <strong id="databaseStatus">Database: checking connection...</strong>
+          <span id="authStatus">Public viewer mode • read-only</span>
+        </div>
+        <a href="#adminPanel" class="btn btn-sm btn-light admin-only d-none"><i class="bi bi-plus-circle"></i> Manage Data</a>
+      </section>
+
+      <section class="section-title" id="objective">
+        <p>A. SCHOOL OVERVIEW</p>
+        <h3>School overview, defined objective, and KPI indicators</h3>
+      </section>
+
+      <div class="dashboard-grid two">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5>About the School</h5>
+              <span>School overview requirement</span>
+            </div>
+            <i class="bi bi-building-fill"></i>
+          </div>
+          <p>
+            <strong>Sta. Cruz Elementary School</strong> is a public elementary
+            school located in Sta. Cruz, Lubao, Pampanga. The dashboard treats
+            the school as an organization that needs to monitor learner intake,
+            student retention, teacher workload, classroom use, and specialized
+            education demand.
+          </p>
+          <div class="info-strip">
+            <span
+              ><i class="bi bi-person-badge"></i> Type: Public Elementary
+              School</span
+            >
+            <span><i class="bi bi-geo"></i> Location: Lubao, Pampanga</span>
+          </div>
+        </div>
+        <div class="panel problem-panel">
+          <div class="panel-header">
+            <div>
+              <h5>Defined Objective</h5>
+              <span>What decision/problem does this support?</span>
+            </div>
+            <i class="bi bi-bullseye"></i>
+          </div>
+          <p>
+            The dashboard supports school administrators in deciding how to
+            address
+            <strong
+              >declining enrollment, uneven class sizes, SPED growth, retention
+              concerns, and attendance data accuracy</strong
+            >.
+          </p>
+          <p class="mb-0">
+            It helps identify where intervention is needed, what risks may
+            happen next, and which management actions should be prioritized.
+          </p>
+        </div>
+      </div>
+
+      <section class="kpi-grid overview-kpis">
+        <div class="kpi-card">
+          <div class="icon blue"><i class="bi bi-people-fill"></i></div>
+          <small>Total Enrollment</small>
+          <h4 id="kpiEnrollment">1,748</h4>
+          <p>Latest SY 2025-2026</p>
+        </div>
+        <div class="kpi-card danger-card">
+          <div class="icon red">
+            <i class="bi bi-arrow-down-right-circle-fill"></i>
+          </div>
+          <small>Enrollment Decline</small>
+          <h4>-11.1%</h4>
+          <p>Decrease of 218 students</p>
+        </div>
+        <div class="kpi-card">
+          <div class="icon green"><i class="bi bi-person-workspace"></i></div>
+          <small>Teacher-Student Ratio</small>
+          <h4>31–32</h4>
+          <p>Students per teacher</p>
+        </div>
+        <div class="kpi-card warning-card">
+          <div class="icon orange">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <small>Highest Dropout</small>
+          <h4>7</h4>
+          <p>Recorded in SY 2024-2025</p>
+        </div>
+        <div class="kpi-card">
+          <div class="icon purple">
+            <i class="bi bi-universal-access-circle"></i>
+          </div>
+          <small>SPED Growth</small>
+          <h4>+97.1%</h4>
+          <p>35 to 69 students</p>
+        </div>
+        <div class="kpi-card warning-card">
+          <div class="icon orange"><i class="bi bi-door-open-fill"></i></div>
+          <small>Class Size Alert</small>
+          <h4>~60</h4>
+          <p>Kinder room peak in 2023-2024</p>
+        </div>
+      </section>
+
+      <section class="section-title" id="descriptive">
+        <p>B. DESCRIPTIVE ANALYSIS</p>
+        <h3>What happened?</h3>
+      </section>
+
+      <div class="dashboard-grid">
+        <div class="panel large">
+          <div class="panel-header">
+            <div>
+              <h5>Enrollment Trend</h5>
+              <span>SY 2021-2022 to 2025-2026</span>
+            </div>
+            <i class="bi bi-activity"></i>
+          </div>
+          <canvas id="enrollmentChart" height="120"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5>Quick Snapshot</h5>
+              <span>Performance at a glance</span>
+            </div>
+            <i class="bi bi-bar-chart-fill"></i>
+          </div>
+          <ul class="clean-list" id="quickSnapshotList">
+            <li>
+              <strong>Overall:</strong> Enrollment declined from 1,966 to 1,748.
+            </li>
+            <li>
+              <strong>Recovery point:</strong> 2023-2024 had a temporary spike.
+            </li>
+            <li>
+              <strong>Class size risk:</strong> Kinder reached around 60
+              students per room.
+            </li>
+            <li>
+              <strong>Data concern:</strong> Attendance was reported at 100%
+              across years.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="dashboard-grid two">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5>Grade Variance</h5>
+              <span>2021-2022 vs 2025-2026</span>
+            </div>
+            <i class="bi bi-columns-gap"></i>
+          </div>
+          <canvas id="varianceChart" height="155"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5>Class Size Status</h5>
+              <span>Over / normal / under monitoring</span>
+            </div>
+            <i class="bi bi-door-open-fill"></i>
+          </div>
+          <div class="room-status">
+            <div>
+              <span class="dot danger"></span><strong>Overcrowded</strong>
+              <p>Kinder SY 2023-2024: ~60 students/room</p>
+            </div>
+            <div>
+              <span class="dot good"></span><strong>Ideal Range</strong>
+              <p>30–40 students per room</p>
+            </div>
+            <div>
+              <span class="dot warn"></span><strong>Needs Review</strong>
+              <p>Uneven section distribution</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="section-title" id="diagnostic">
+        <p>C. DIAGNOSTIC ANALYSIS</p>
+        <h3>Why did it happen? Evidence + response actions</h3>
+      </section>
+
+      <div class="toolbar-card">
+        <div>
+          <h5>Diagnostic Action Board</h5>
+          <p>
+            Filter issues by focus area. This section includes Diagnostic
+            Analytics items 1 to 7.
+          </p>
+        </div>
+        <div class="filter-group" data-filter-group="diagnostic">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="intake">Intake</button>
+          <button class="filter-btn" data-filter="retention">Retention</button>
+          <button class="filter-btn" data-filter="resource">Resource</button>
+          <button class="filter-btn" data-filter="data">Data</button>
+        </div>
+      </div>
+
+      <div class="action-grid diagnostic-actions">
+        <article class="action-card" data-category="intake retention">
+          <span class="badge-pill">1. Root Cause Analysis</span>
+          <h5>Enrollment instability and decline</h5>
+          <p>
+            <strong>Evidence:</strong> Total enrollment decreased by 218
+            students or -11.1% over five years.
+          </p>
+          <p>
+            <strong>Cause:</strong> Irregular student intake in Kinder and Grade
+            1 plus inconsistent cohort progression.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-check-circle-fill"></i> Response: Monitor intake by
+            grade level every enrollment period and flag grades with large
+            movement.
+          </div>
+        </article>
+        <article class="action-card" data-category="intake retention">
+          <span class="badge-pill">2. 5 Whys Analysis</span>
+          <h5>Why are fewer students continuing?</h5>
+          <ol class="compact-list">
+            <li>Enrollment declines because fewer students continue.</li>
+            <li>Some families may transfer or migrate.</li>
+            <li>
+              Preferences may change due to programs, accessibility, and class
+              setup.
+            </li>
+            <li>
+              The school lacks proactive attraction and retention strategies.
+            </li>
+            <li>Monitoring and community engagement are limited.</li>
+          </ol>
+          <div class="next-step">
+            <i class="bi bi-check-circle-fill"></i> Response: Use exit survey,
+            parent feedback, and early registration monitoring.
+          </div>
+        </article>
+        <article class="action-card" data-category="intake retention">
+          <span class="badge-pill">3. Comparison Analysis</span>
+          <h5>Grade-level differences show uneven movement</h5>
+          <p>
+            Kinder and Grade 1 fluctuate, Grade 3 and Grade 6 show large
+            declines, while SPED increases.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-check-circle-fill"></i> Response: Compare each grade
+            against previous and next grade to find cohort breaks.
+          </div>
+        </article>
+        <article class="action-card" data-category="retention resource">
+          <span class="badge-pill">4. Variance Analysis</span>
+          <h5>Largest positive and negative changes</h5>
+          <p>
+            <strong>Major declines:</strong> Grade 3 (-129 / -35.6%) and Grade 6
+            (-94 / -33.2%).
+          </p>
+          <p>
+            <strong>Growth:</strong> SPED (+34 / +97.1%), Grade 2 (+35 / +17%),
+            Grade 5 (+31 / +14.6%).
+          </p>
+          <div class="next-step">
+            <i class="bi bi-check-circle-fill"></i> Response: Prioritize Grade 3
+            and Grade 6 retention review; support SPED expansion.
+          </div>
+        </article>
+        <article class="action-card" data-category="retention">
+          <span class="badge-pill">5. Drill-down Analysis</span>
+          <h5>Find where the decline is concentrated</h5>
+          <p>
+            The biggest drops are not across all grades equally. They are
+            concentrated in specific cohorts, especially Grade 3 and Grade 6.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-check-circle-fill"></i> Response: Drill down by
+            section, adviser, transfer records, and completion status.
+          </div>
+        </article>
+        <article class="action-card" data-category="resource intake data">
+          <span class="badge-pill">6. Exception Analysis</span>
+          <h5>Unusual cases that need attention</h5>
+          <ul class="compact-list">
+            <li>2023-2024 enrollment spike to 1,914.</li>
+            <li>Grade 6 drop in 2025-2026 to 189.</li>
+            <li>
+              Kinder overcrowding in 2023-2024 at around 60 students per room.
+            </li>
+          </ul>
+          <div class="next-step">
+            <i class="bi bi-check-circle-fill"></i> Response: Check exceptional
+            years and rooms before final planning.
+          </div>
+        </article>
+        <article
+          class="action-card"
+          data-category="intake retention resource data"
+        >
+          <span class="badge-pill">7. Pattern Identification</span>
+          <h5>Repeated trends across the data</h5>
+          <ul class="compact-list">
+            <li>Overall declining enrollment with one recovery year.</li>
+            <li>Unstable early-grade intake.</li>
+            <li>Irregular cohort movement.</li>
+            <li>Growing SPED demand.</li>
+            <li>
+              Stable teacher ratio means capacity is not the main problem.
+            </li>
+          </ul>
+          <div class="next-step">
+            <i class="bi bi-check-circle-fill"></i> Response: Connect trend
+            alerts to monthly decision meetings.
+          </div>
+        </article>
+      </div>
+
+      <div class="dashboard-grid two">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5>Root Cause Priority Meter</h5>
+              <span>Which areas need management attention?</span>
+            </div>
+            <i class="bi bi-thermometer-high"></i>
+          </div>
+          <canvas id="diagnosticPriorityChart" height="150"></canvas>
+        </div>
+        <div class="panel accent-panel">
+          <h5><i class="bi bi-diagram-3"></i> Diagnostic Workflow</h5>
+          <ol>
+            <li>Identify unusual changes in grade-level enrollment.</li>
+            <li>Compare affected grades against prior years.</li>
+            <li>
+              Validate with dropout, transfer, repeater, and attendance records.
+            </li>
+            <li>Assign response action to the responsible school unit.</li>
+            <li>Review results monthly using the dashboard.</li>
+          </ol>
+        </div>
+      </div>
+
+      <section class="section-title" id="predictive">
+        <p>D. PREDICTIVE ANALYSIS</p>
+        <h3>What may happen next? Forecast + preparation actions</h3>
+      </section>
+
+      <div class="dashboard-grid two">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5>Enrollment Forecast</h5>
+              <span>If no intervention happens</span>
+            </div>
+            <i class="bi bi-magic"></i>
+          </div>
+          <canvas id="forecastChart" height="140"></canvas>
+        </div>
+        <div class="panel accent-panel">
+          <h5>
+            <i class="bi bi-shield-exclamation"></i> Early Warning Monitor
+          </h5>
+          <ol id="earlyWarningList">
+            <li>Dynamic forecast and preparation warnings will appear after the dataset loads.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="toolbar-card mt-4">
+        <div>
+          <h5>Predictive Action Board</h5>
+          <p>
+            Includes Predictive Analytics items 1 to 6 with forecast triggers
+            and preparation steps.
+          </p>
+        </div>
+        <div class="filter-group" data-filter-group="predictive">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="enrollment">
+            Enrollment
+          </button>
+          <button class="filter-btn" data-filter="staffing">Staffing</button>
+          <button class="filter-btn" data-filter="classroom">Classroom</button>
+          <button class="filter-btn" data-filter="student">
+            Student Support
+          </button>
+          <button class="filter-btn" data-filter="data">Data</button>
+        </div>
+      </div>
+
+      <div class="action-grid predictive-actions">
+        <article class="action-card" data-category="enrollment">
+          <span class="badge-pill">1. Enrollment Trend Prediction</span>
+          <h5>Projected decline without intervention</h5>
+          <p>
+            <strong>Finding:</strong> Enrollment shows an overall declining
+            pattern at around -2% to -4% yearly.
+          </p>
+          <p>
+            <strong>Forecast:</strong> 2026-2027: ~1,700; 2027-2028: ~1,650.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-lightning-charge-fill"></i> Preparation: Start
+            enrollment recovery and community outreach before the next school
+            year.
+          </div>
+        </article>
+        <article class="action-card" data-category="staffing">
+          <span class="badge-pill">2. Teacher-Student Ratio</span>
+          <h5>Ratio may remain stable or improve</h5>
+          <p>
+            <strong>Finding:</strong> Teacher-student ratio remains around 31–32
+            students per teacher.
+          </p>
+          <p>
+            <strong>Forecast:</strong> If enrollment drops but teachers
+            decrease, ratio stays ~31. If teachers remain, ratio may improve.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-lightning-charge-fill"></i> Preparation: Avoid
+            automatic staff reduction; review actual section needs first.
+          </div>
+        </article>
+        <article class="action-card" data-category="classroom">
+          <span class="badge-pill">3. Class Size Distribution</span>
+          <h5>Uneven class sizes may continue</h5>
+          <p>
+            <strong>Finding:</strong> Most classes are in the 31–40 range, but
+            some reach 41–50 or higher.
+          </p>
+          <p>
+            <strong>Forecast:</strong> More uneven distribution and overcrowding
+            risk in selected sections.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-lightning-charge-fill"></i> Preparation: Use annual
+            section planning and room redistribution.
+          </div>
+        </article>
+        <article class="action-card" data-category="student">
+          <span class="badge-pill">4. Dropout Rate</span>
+          <h5>Dropout risk can stay low if intervention continues</h5>
+          <p>
+            <strong>Finding:</strong> Highest recorded dropout rate was 0.38% in
+            2024-2025; most recent is 0.06%.
+          </p>
+          <p>
+            <strong>Forecast:</strong> Can remain low if current support
+            continues; may rise again if monitoring stops.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-lightning-charge-fill"></i> Preparation: Keep
+            at-risk student tracking and parent follow-up.
+          </div>
+        </article>
+        <article class="action-card" data-category="student">
+          <span class="badge-pill">5. Repeater Rate</span>
+          <h5>Academic support may stabilize repeaters</h5>
+          <p>
+            <strong>Finding:</strong> Peak repeater rate was 0.63% in 2023-2024,
+            then decreased.
+          </p>
+          <p>
+            <strong>Forecast:</strong> May stabilize with sustained remedial
+            classes and tutoring.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-lightning-charge-fill"></i> Preparation: Maintain
+            academic intervention logs per grade level.
+          </div>
+        </article>
+        <article class="action-card" data-category="data">
+          <span class="badge-pill">6. Attendance Rate</span>
+          <h5>Reported 100% attendance needs validation</h5>
+          <p>
+            <strong>Finding:</strong> Attendance is reported as 100% across
+            years, which may indicate recording limitations.
+          </p>
+          <p>
+            <strong>Forecast:</strong> Data may remain unreliable if validation
+            procedures are not implemented.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-lightning-charge-fill"></i> Preparation: Use
+            verified attendance logs and monthly checking.
+          </div>
+        </article>
+      </div>
+
+      <section class="section-title" id="prescriptive">
+        <p>E. PRESCRIPTIVE ANALYSIS</p>
+        <h3>What should management do?</h3>
+      </section>
+
+      <div class="toolbar-card">
+        <div>
+          <h5>Prescriptive Action Board</h5>
+          <p>
+            Complete recommended actions from the report: Quick Wins,
+            Medium-Term Actions, risks, benefits, and timeline.
+          </p>
+        </div>
+        <div class="filter-group" data-filter-group="prescriptive">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="quick">Quick Wins</button>
+          <button class="filter-btn" data-filter="medium">Medium-Term</button>
+          <button class="filter-btn" data-filter="high">High Priority</button>
+        </div>
+      </div>
+
+      <div class="action-grid prescriptive-actions">
+        <article class="action-card" data-category="quick high">
+          <span class="badge-pill high">1. Quick Win • 0–6 Months</span>
+          <h5>Centralized Data Monitoring Dashboard</h5>
+          <p>
+            <strong>Actions / Steps:</strong> Develop a unified dashboard using
+            Web, Excel, or Google Sheets; consolidate enrollment, attendance,
+            and grade-level data monthly; assign a data coordinator.
+          </p>
+          <p>
+            <strong>Risks / Challenges:</strong> Inconsistent data entry;
+            resistance from staff unfamiliar with digital tools.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-clock-fill"></i> Benefits: Faster reporting within
+            1–2 months; improved decision-making within 3 months.
+          </div>
+        </article>
+        <article class="action-card" data-category="quick high">
+          <span class="badge-pill high">2. Quick Win • 0–6 Months</span>
+          <h5>Attendance and At-Risk Student Tracking System</h5>
+          <p>
+            <strong>Actions / Steps:</strong> Identify students below 90%
+            attendance; create weekly monitoring and intervention logs; assign
+            teachers to follow up.
+          </p>
+          <p>
+            <strong>Risks / Challenges:</strong> Increased teacher workload;
+            lack of parental cooperation.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-clock-fill"></i> Benefits: Early dropout
+            identification within 1–2 months; reduced absenteeism within 6
+            months.
+          </div>
+        </article>
+        <article class="action-card" data-category="quick">
+          <span class="badge-pill">3. Quick Win • 0–6 Months</span>
+          <h5>Monthly Data Review and Decision Meetings</h5>
+          <p>
+            <strong>Actions / Steps:</strong> Conduct monthly meetings; review
+            enrollment, class size, and SPED growth; implement immediate
+            corrective actions.
+          </p>
+          <p>
+            <strong>Risks / Challenges:</strong> Time constraints and possible
+            lack of data-driven culture.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-clock-fill"></i> Benefits: Improved coordination
+            within 3 months; data-driven culture within 6 months.
+          </div>
+        </article>
+        <article class="action-card" data-category="medium high">
+          <span class="badge-pill high">4. Medium-Term • 1–3 Years</span>
+          <h5>Enrollment Recovery and Retention Program</h5>
+          <p>
+            <strong>Actions / Steps:</strong> Conduct exit surveys; implement
+            targeted retention programs; strengthen early registration and
+            community outreach.
+          </p>
+          <p>
+            <strong>Risks / Challenges:</strong> External demographic changes;
+            low parent participation.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-clock-fill"></i> Benefits: Stabilized enrollment
+            within 1–2 years; improved retention within 2–3 years.
+          </div>
+        </article>
+        <article class="action-card" data-category="medium high">
+          <span class="badge-pill high">5. Medium-Term • 1–3 Years</span>
+          <h5>SPED Resource Expansion and Reallocation</h5>
+          <p>
+            <strong>Actions / Steps:</strong> Reallocate classrooms from
+            declining grade levels to SPED; train or hire SPED-specialized
+            teachers; provide specialized learning materials.
+          </p>
+          <p>
+            <strong>Risks / Challenges:</strong> Budget limitations; shortage of
+            trained SPED teachers.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-clock-fill"></i> Benefits: Improved SPED service
+            delivery within 1–2 years; better outcomes within 2–3 years.
+          </div>
+        </article>
+        <article class="action-card" data-category="medium">
+          <span class="badge-pill">6. Medium-Term • 1–3 Years</span>
+          <h5>Class Size Optimization and Section Redistribution</h5>
+          <p>
+            <strong>Actions / Steps:</strong> Maintain 35–45 students per
+            section; merge underutilized classes; expand overcrowded sections;
+            use annual section planning.
+          </p>
+          <p>
+            <strong>Risks / Challenges:</strong> Scheduling conflicts;
+            resistance to section reshuffling.
+          </p>
+          <div class="next-step">
+            <i class="bi bi-clock-fill"></i> Benefits: Balanced classroom
+            distribution within 1 school year; improved engagement within 2
+            years.
+          </div>
+        </article>
+      </div>
+
+      <section class="section-title" id="spreadsheet">
+        <p>F. SPREADSHEET DATASET</p>
+        <h3>
+          Raw Data, Summary, and School Performance Analysis inside the
+          dashboard
+        </h3>
+      </section>
+
+      <div class="panel table-panel">
+        <div class="panel-header">
+          <div>
+            <h5>Embedded Spreadsheet Preview</h5>
+            <span
+              >Displayed directly in the dashboard instead of only using an
+              external button</span
+            >
+          </div>
+          <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+        </div>
+        <ul class="nav nav-pills data-tabs mb-3" id="dataTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              data-bs-toggle="pill"
+              data-bs-target="#rawTab"
+              type="button"
+            >
+              Raw Data
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              data-bs-toggle="pill"
+              data-bs-target="#summaryTab"
+              type="button"
+            >
+              Summary
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              data-bs-toggle="pill"
+              data-bs-target="#analysisTab"
+              type="button"
+            >
+              School Performance Analysis
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="rawTab">
+            <div class="table-responsive">
+              <table class="table align-middle mb-0" id="varianceTable">
+                <thead>
+                  <tr>
+                    <th>Grade Level</th>
+                    <th>2021-2022</th>
+                    <th>2025-2026</th>
+                    <th>Net Variance</th>
+                    <th>% Change</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="summaryTab">
+            <div class="table-responsive">
+              <table class="table align-middle mb-0" id="summaryTable">
+                <thead>
+                  <tr>
+                    <th>School Year</th>
+                    <th>Total Enrollment</th>
+                    <th>Pattern</th>
+                    <th>Management Note</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="analysisTab">
+            <div class="analysis-list" id="dynamicAnalysisList">
+              <div><i class="bi bi-hourglass-split text-warning"></i><strong>Loading analysis:</strong> Dynamic rule-based insights will appear here after the dataset loads.</div>
+            </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="section-title admin-only d-none" id="adminPanel">
+        <p>G. ADMIN DATA MANAGEMENT</p>
+        <h3>Add, edit, and delete school year data</h3>
+      </section>
+
+      <div class="dashboard-grid admin-layout admin-only d-none">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5 id="dataFormTitle">Add New School Year Data</h5>
+              <span>Saved permanently to Supabase database when configured</span>
+            </div>
+            <i class="bi bi-database-add"></i>
+          </div>
+          <form id="schoolYearForm" class="data-form wide-data-form">
+            <input type="hidden" id="recordId" />
+            <div class="row g-3">
+              <div class="col-lg-6"><label class="form-label">School Year</label><input class="form-control" id="schoolYear" placeholder="Ex. 2026-2027" required /></div>
+              <div class="col-lg-6"><label class="form-label">Total Enrollment</label><input class="form-control" id="totalEnrollment" type="number" min="0" placeholder="Enter total enrollment" required /></div>
+              <div class="col-lg-6"><label class="form-label">Kinder</label><input class="form-control" id="kinder" type="number" min="0" placeholder="Enter Kinder count" /></div>
+              <div class="col-lg-6"><label class="form-label">Grade 1</label><input class="form-control" id="grade1" type="number" min="0" placeholder="Enter Grade 1 count" /></div>
+              <div class="col-lg-6"><label class="form-label">Grade 2</label><input class="form-control" id="grade2" type="number" min="0" placeholder="Enter Grade 2 count" /></div>
+              <div class="col-lg-6"><label class="form-label">Grade 3</label><input class="form-control" id="grade3" type="number" min="0" placeholder="Enter Grade 3 count" /></div>
+              <div class="col-lg-6"><label class="form-label">Grade 4</label><input class="form-control" id="grade4" type="number" min="0" placeholder="Enter Grade 4 count" /></div>
+              <div class="col-lg-6"><label class="form-label">Grade 5</label><input class="form-control" id="grade5" type="number" min="0" placeholder="Enter Grade 5 count" /></div>
+              <div class="col-lg-6"><label class="form-label">Grade 6</label><input class="form-control" id="grade6" type="number" min="0" placeholder="Enter Grade 6 count" /></div>
+              <div class="col-lg-6"><label class="form-label">SPED</label><input class="form-control" id="sped" type="number" min="0" placeholder="Enter SPED count" /></div>
+              <div class="col-lg-6"><label class="form-label">Teachers</label><input class="form-control" id="teachers" type="number" min="1" placeholder="Enter teacher count" /></div>
+              <div class="col-lg-6"><label class="form-label">Classrooms</label><input class="form-control" id="classrooms" type="number" min="1" placeholder="Enter classroom count" /></div>
+              <div class="col-lg-6"><label class="form-label">Dropouts</label><input class="form-control" id="dropouts" type="number" min="0" placeholder="Enter dropout count" /></div>
+              <div class="col-lg-6"><label class="form-label">Repeaters</label><input class="form-control" id="repeaters" type="number" min="0" placeholder="Enter repeater count" /></div>
+              <div class="col-lg-6"><label class="form-label">Attendance Rate %</label><input class="form-control" id="attendanceRate" type="number" min="0" max="100" step="0.01" placeholder="Enter attendance rate" /></div>
+              <div class="col-lg-6"><label class="form-label">Performance Rate %</label><input class="form-control" id="performanceRate" type="number" min="0" max="100" step="0.01" placeholder="Enter performance rate" /></div>
+              <div class="col-12"><label class="form-label">Notes</label><textarea class="form-control" id="notes" rows="3" placeholder="Optional management note"></textarea></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save Data</button>
+              <button class="btn btn-light" type="button" id="resetFormBtn">Clear</button>
+            </div>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h5>Admin Controls</h5>
+              <span>Only logged-in admins can manage records</span>
+            </div>
+            <i class="bi bi-person-gear"></i>
+          </div>
+          <div class="admin-note">
+            <strong>Public users:</strong> can view the dashboard and analytics only.<br />
+            <strong>Admins:</strong> can add, edit, and delete school year records.
+          </div>
+          <div id="formMessage" class="alert d-none mt-3" role="alert"></div>
+        </div>
+      </div>
+
+      <div class="panel table-panel admin-only d-none">
+        <div class="panel-header">
+          <div>
+            <h5>Saved School Year Records</h5>
+            <span>Database records used by KPIs, charts, analyses, and recommendations</span>
+          </div>
+          <i class="bi bi-table"></i>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-middle mb-0" id="adminDataTable">
+            <thead><tr><th>School Year</th><th>Total</th><th>Dropouts</th><th>Repeaters</th><th>Attendance</th><th>Performance</th><th>Action</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <section class="section-title" id="matrix">
+        <p>H. DECISION MATRIX</p>
+        <h3>Priority ranking for management action</h3>
+      </section>
+
+      <div class="panel table-panel">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0" id="decisionMatrixTable">
+            <thead>
+              <tr>
+                <th>Problem Area</th>
+                <th>Strategy</th>
+                <th>Impact</th>
+                <th>Feasibility</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+          Sta. Cruz Elementary School • School Performance Analytics & Decision
+          Support Plan
+        </p>
+      </footer>
+    </main>
+
+
+    <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content auth-modal">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="bi bi-shield-lock"></i> Admin Login</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="loginForm">
+            <div class="modal-body">
+              <p class="text-muted small">Login is required before adding, editing, or deleting school year data.</p>
+              <label class="form-label">Email</label>
+              <input class="form-control mb-3" type="email" id="adminEmail" required />
+              <label class="form-label">Password</label>
+              <input class="form-control" type="password" id="adminPassword" required />
+              <div id="loginMessage" class="alert d-none mt-3 mb-0" role="alert"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary"><i class="bi bi-box-arrow-in-right"></i> Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+  
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
